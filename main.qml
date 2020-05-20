@@ -12,7 +12,7 @@ Window {
     Column {
         anchors.centerIn: parent
         scale: Math.min(parent.width/width, parent.height/height)
-
+        padding: 10
         InfoLabel {
         id: infoLabel
         }
@@ -41,7 +41,7 @@ Window {
                 },
                 State {
                     name: "WHITE_TURN"
-                   when: !board.blackTurn && !board.finished
+                    when: !board.blackTurn && !board.finished
                     PropertyChanges { target: infoLabel; text: "White's turn!" }
                 },
                 State {
@@ -55,6 +55,8 @@ Window {
                     when: !board.blackTurn && board.finished
                     PropertyChanges { target: infoLabel; text: "White won!" }
                 }
+
+
             ]
 
             Grid {
@@ -67,7 +69,39 @@ Window {
                     id: boardRepeater
                     model:  [].concat(...board.model)
                     GomokuItem {}
+
+
+                    Behavior on model {
+                        SequentialAnimation {
+
+                            NumberAnimation {
+                                target: boardGrid
+                                property: "scale"
+                                duration: 200
+                                to: 0
+                            }
+                            NumberAnimation {
+                                target: boardGrid
+                                property: "scale"
+                                duration: 200
+                                to: 1
+                            }
+                        }
+                    }
                 }
+            }
+
+        }
+        Button {
+            text: "Reset"
+            highlighted: true
+            anchors.horizontalCenter: parent.horizontalCenter
+            onPressed: {
+                board.model = Array(board.rows).fill(Array(board.columns))
+                boardRepeater.model = null
+                boardRepeater.model = [].concat(...board.model)
+                board.blackTurn = true
+                board.finished = false
             }
         }
     }
