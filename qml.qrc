@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>GomokuItem.qml</file>
+        <file>InfoLabel.qml</file>
+    </qresource>
+</RCC>
