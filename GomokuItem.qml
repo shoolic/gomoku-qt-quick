@@ -56,19 +56,18 @@ Rectangle {
                         y+=dirTurn[1];
                         count++;
                     }
-
-                    if(startX === -1) { startX = x; }
-                    if(startY === -1) { startY = y; }
+                    startX = x;
+                    startY = y;
             }
 
             if(count === 5) {
                 while(count !== 0) {
                     boardRepeater.itemAt(translateTo1D(startX, startY)).state = "WIN";
-                    startX += dir[1][0];
-                    startY += dir[1][1];
+                    startX += dir[0][0];
+                    startY += dir[0][1];
                     count--;
-                    board.finished = true;
                 }
+                board.finished = true;
                 return true;
             }
         }
