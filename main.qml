@@ -13,8 +13,9 @@ Window {
         anchors.centerIn: parent
         scale: Math.min(parent.width/width, parent.height/height)
         padding: 10
+
         InfoLabel {
-        id: infoLabel
+            id: infoLabel
         }
 
         Item {
@@ -23,8 +24,8 @@ Window {
             height: rows*40
             anchors.horizontalCenter: parent.horizontalCenter
 
-            property int rows: 10
-            property int columns: 10
+            property int rows: 15
+            property int columns: 15
 
             property bool blackTurn: true
             property bool finished: false
@@ -32,7 +33,6 @@ Window {
             property var model: Array(rows).fill(Array(columns));
 
             state: "BLACK_TURN"
-
             states: [
                 State {
                     name: "BLACK_TURN"
@@ -55,9 +55,17 @@ Window {
                     when: !board.blackTurn && board.finished
                     PropertyChanges { target: infoLabel; text: "White won!" }
                 }
-
-
             ]
+
+            signal reset()
+
+            onReset: {
+                board.model = Array(board.rows).fill(Array(board.columns))
+                boardRepeater.model = null
+                boardRepeater.model = [].concat(...board.model)
+                board.blackTurn = true
+                board.finished = false
+            }
 
             Grid {
                 id: boardGrid
@@ -90,19 +98,13 @@ Window {
                     }
                 }
             }
-
         }
+
         Button {
             text: "Reset"
             highlighted: true
             anchors.horizontalCenter: parent.horizontalCenter
-            onPressed: {
-                board.model = Array(board.rows).fill(Array(board.columns))
-                boardRepeater.model = null
-                boardRepeater.model = [].concat(...board.model)
-                board.blackTurn = true
-                board.finished = false
-            }
+            onPressed: board.reset()
         }
     }
 }
